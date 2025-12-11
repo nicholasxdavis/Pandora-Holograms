@@ -442,32 +442,9 @@ See the [LICENSE](LICENSE) file for full terms and conditions.
 
 ---
 
-## Credits
-
-- **Author**: Blacnova Development
-- **Inspired by**: DecentHolograms
-- **Built for**: Paper/Spigot servers
-
----
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/PandoraHolograms/issues)
-- **Discord**: [Join our Discord](https://discord.gg/yourinvite)
-- **Documentation**: [Wiki](https://github.com/yourusername/PandoraHolograms/wiki)
-
----
-
-## Show Your Support
-
-If you like this plugin, please consider giving it a star on GitHub!
-
----
-
 <div align="center">
 
 **Made with love by Blacnova Development**
 
-[Back to Top](#pandoraholograms)
-
 </div>
+
