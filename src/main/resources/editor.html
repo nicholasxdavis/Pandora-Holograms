@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pandora Holograms by Blacnova Development</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #2b2b2b;
+            --input-bg: #1a1a1a;
+            --text-color: #ddd;
+            --mc-btn-gray: #777;
+            --mc-btn-shadow: #333;
+            --accent-color: #FFFF55; /* Changed to Yellow (&e) */
+        }
+
+        @font-face {
+            font-family: 'Minecraftia';
+            src: url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraftia/src/Minecraftia-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Global Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #222;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            overflow: hidden;
+            font-family: 'Minecraftia', 'Press Start 2P', monospace;
+            display: flex;
+            flex-direction: row; 
+        }
+
+        /* --- LEFT SIDE: VIEWPORT --- */
+        #viewport {
+            flex: 1; 
+            position: relative;
+            background: 
+                radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png'),
+                linear-gradient(to bottom, #050510, #151525);
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 800px;
+            overflow: hidden;
+        }
+
+        /* Sidebar Buttons Container */
+        .sidebar-nav {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 50;
+        }
+
+        /* Generic Side Button Style */
+        .side-btn {
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 2px solid #555;
+            color: #eee;
+            padding: 8px 12px;
+            font-family: 'Minecraftia', monospace;
+            font-size: 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+            cursor: pointer;
+            width: 120px; /* Fixed width for uniformity */
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-sizing: border-box;
+        }
+        .side-btn:hover {
+            background-color: #444;
+            border-color: #777;
+            transform: translateY(-1px);
+        }
+
+        .hologram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: float 4s ease-in-out infinite;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* MC Text Styling */
+        .mc-line {
+            font-size: 20px;
+            line-height: 28px;
+            white-space: pre;
+            text-shadow: 2px 2px 0px #3f3f3f;
+            min-height: 28px; 
+        }
+        
+        /* Color Codes */
+        .mc-0 { color: #000000; text-shadow: none; }
+        .mc-1 { color: #0000AA; text-shadow: 2px 2px 0px #00002A; }
+        .mc-2 { color: #00AA00; text-shadow: 2px 2px 0px #002A00; }
+        .mc-3 { color: #00AAAA; text-shadow: 2px 2px 0px #002A2A; }
+        .mc-4 { color: #AA0000; text-shadow: 2px 2px 0px #2A0000; }
+        .mc-5 { color: #AA00AA; text-shadow: 2px 2px 0px #2A002A; }
+        .mc-6 { color: #FFAA00; text-shadow: 2px 2px 0px #2A2A00; }
+        .mc-7 { color: #AAAAAA; text-shadow: 2px 2px 0px #2A2A2A; }
+        .mc-8 { color: #555555; text-shadow: 2px 2px 0px #151515; }
+        .mc-9 { color: #5555FF; text-shadow: 2px 2px 0px #15153F; }
+        .mc-a { color: #55FF55; text-shadow: 2px 2px 0px #153F15; }
+        .mc-b { color: #55FFFF; text-shadow: 2px 2px 0px #153F3F; }
+        .mc-c { color: #FF5555; text-shadow: 2px 2px 0px #3F1515; }
+        .mc-d { color: #FF55FF; text-shadow: 2px 2px 0px #3F153F; }
+        .mc-e { color: #FFFF55; text-shadow: 2px 2px 0px #3F3F15; }
+        .mc-f { color: #FFFFFF; text-shadow: 2px 2px 0px #3F3F3F; }
+        .mc-l { font-weight: bold; }
+        .mc-o { font-style: italic; }
+        .mc-n { text-decoration: underline; }
+        .mc-m { text-decoration: line-through; }
+        .mc-k { opacity: 0.8; }
+
+        /* --- RIGHT SIDE: EDITOR UI --- */
+        #editor-panel {
+            width: 400px;
+            background-color: var(--panel-bg);
+            border-left: 4px solid #111;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .panel-header {
+            padding: 15px;
+            background-color: #333;
+            border-bottom: 2px solid #111;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        #editor-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Minecraft-style inputs */
+        input[type="text"], select {
+            background-color: #000;
+            border: 2px solid #555;
+            color: white;
+            padding: 8px;
+            font-family: 'Minecraftia', monospace;
+            font-size: 14px;
+            outline: none;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #aaa;
+        }
+
+        /* Line Editor List */
+        #line-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .line-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .line-handle {
+            color: #555;
+            cursor: move;
+            font-size: 12px;
+            padding: 5px;
+        }
+
+        .line-input {
+            flex-grow: 1;
+        }
+
+        /* Minecraft-style Buttons */
+        .mc-btn {
+            background-color: #777;
+            border: 2px solid #000;
+            border-top-color: #999;
+            border-left-color: #999;
+            color: white;
+            padding: 8px 12px;
+            font-family: 'Minecraftia', monospace;
+            cursor: pointer;
+            text-shadow: 1px 1px 0 #333;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .mc-btn:active {
+            border-top-color: #000;
+            border-left-color: #000;
+            border-bottom-color: #999;
+            border-right-color: #999;
+            background-color: #666;
+        }
+        .mc-btn-red { background-color: #aa4444; border-color: #550000; }
+        .mc-btn-red:active { background-color: #882222; }
+        .mc-btn-green { background-color: #44aa44; border-color: #005500; }
+        .mc-btn-green:active { background-color: #228822; }
+
+        .btn-icon { font-size: 14px; }
+
+        /* Modals & Overlays */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #222;
+            border: 2px solid white;
+            padding: 20px;
+            width: 600px;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* DOCS SPECIFIC CSS */
+        #docs-modal .modal-content {
+            width: 800px;
+            height: 80%;
+            max-height: 800px;
+        }
+
+        .docs-header {
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .docs-body {
+            overflow-y: auto;
+            padding-right: 10px;
+            color: #ccc;
+            font-family: 'Minecraftia', monospace;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .docs-section { margin-bottom: 30px; }
+        .docs-h1 { font-size: 20px; color: var(--accent-color); margin-bottom: 15px; text-shadow: 2px 2px 0 #000; }
+        .docs-h2 { font-size: 16px; color: #fff; margin-bottom: 10px; margin-top: 20px; text-decoration: underline; }
+        
+        .cmd-block {
+            background: #111;
+            border: 1px solid #444;
+            padding: 10px;
+            font-family: monospace;
+            margin: 5px 0;
+            color: #eee;
+        }
+        .cmd-arg { color: #4aa; } /* Aqua for args */
+        .cmd-opt { color: #888; } /* Gray for optional */
+
+        textarea.export-area {
+            width: 100%;
+            height: 300px;
+            background: #111;
+            color: #eee;
+            border: 1px solid #555;
+            padding: 10px;
+            font-family: monospace;
+            resize: none;
+            box-sizing: border-box; 
+        }
+
+        /* Color Picker Helper (Simple) */
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 5px;
+            padding: 5px;
+            background: #111;
+            border: 1px solid #444;
+        }
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 1px solid #555;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+
+        /* Support Link */
+        .support-link {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #444;
+            background-color: #252525;
+            font-size: 12px;
+        }
+        .support-link a {
+            color: #FFDD00;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .support-link a:hover {
+            color: #ffee55;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            body { flex-direction: column; }
+            #editor-panel { width: 100%; height: 50%; border-left: none; border-top: 4px solid #111; }
+            #viewport { height: 50%; }
+            #docs-modal .modal-content { width: 95%; height: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="viewport">
+    <div class="sidebar-nav">
+        <div class="side-btn" onclick="openDocs()"><i class="fas fa-book"></i> Docs</div>
+        <a href="https://example.com" target="_blank" class="side-btn"><i class="fas fa-download"></i> Download</a>
+        <a href="https://example.com" target="_blank" class="side-btn"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+    
+    <div id="active-hologram" class="hologram"></div>
+</div>
+
+<div id="editor-panel">
+    <div class="panel-header">
+        <div class="panel-title">Hologram Editor</div>
+        <button class="mc-btn mc-btn-green" onclick="showExport()">
+            <i class="fas fa-file-export btn-icon"></i> Export
+        </button>
+    </div>
+
+    <div id="editor-content">
+        <div class="control-group">
+            <label>Hologram Name (ID)</label>
+            <input type="text" id="holo-name" value="pandora_holo" oninput="updatePreview()">
+        </div>
+
+        <div class="control-group">
+            <label>Quick Colors (Click to copy code)</label>
+            <div class="color-palette">
+                <div class="color-swatch" style="background:#000" title="&0 Black" onclick="copyCode('&0')"></div>
+                <div class="color-swatch" style="background:#0000AA" title="&1 Dark Blue" onclick="copyCode('&1')"></div>
+                <div class="color-swatch" style="background:#00AA00" title="&2 Dark Green" onclick="copyCode('&2')"></div>
+                <div class="color-swatch" style="background:#00AAAA" title="&3 Dark Aqua" onclick="copyCode('&3')"></div>
+                <div class="color-swatch" style="background:#AA0000" title="&4 Dark Red" onclick="copyCode('&4')"></div>
+                <div class="color-swatch" style="background:#AA00AA" title="&5 Dark Purple" onclick="copyCode('&5')"></div>
+                <div class="color-swatch" style="background:#FFAA00" title="&6 Gold" onclick="copyCode('&6')"></div>
+                <div class="color-swatch" style="background:#AAAAAA" title="&7 Gray" onclick="copyCode('&7')"></div>
+                <div class="color-swatch" style="background:#555555" title="&8 Dark Gray" onclick="copyCode('&8')"></div>
+                <div class="color-swatch" style="background:#5555FF" title="&9 Blue" onclick="copyCode('&9')"></div>
+                <div class="color-swatch" style="background:#55FF55" title="&a Green" onclick="copyCode('&a')"></div>
+                <div class="color-swatch" style="background:#55FFFF" title="&b Aqua" onclick="copyCode('&b')"></div>
+                <div class="color-swatch" style="background:#FF5555" title="&c Red" onclick="copyCode('&c')"></div>
+                <div class="color-swatch" style="background:#FF55FF" title="&d Light Purple" onclick="copyCode('&d')"></div>
+                <div class="color-swatch" style="background:#FFFF55" title="&e Yellow" onclick="copyCode('&e')"></div>
+                <div class="color-swatch" style="background:#FFFFFF" title="&f White" onclick="copyCode('&f')"></div>
+                <!-- Formats -->
+                <div class="color-swatch" style="background:#333; color:white; display:flex; justify-content:center; align-items:center; font-weight:bold" title="&l Bold" onclick="copyCode('&l')">B</div>
+            </div>
+            <div id="copy-feedback" style="font-size: 10px; color: #44aa44; height: 12px;"></div>
+        </div>
+
+        <div class="control-group">
+            <label>Lines</label>
+            <div id="line-list">
+                <!-- Lines injected here by JS -->
+            </div>
+            <button class="mc-btn" onclick="addNewLine()">
+                <i class="fas fa-plus btn-icon"></i> Add Line
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Support Link -->
+    <div class="support-link">
+        <a href="https://buymeacoffee.com/galore" target="_blank">
+            <i class="fas fa-heart"></i> Support us
+        </a>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div id="export-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="color:white; margin-top:0;">Export Commands</h3>
+        
+        <div class="control-group">
+            <label for="export-format">Plugin Format:</label>
+            <select id="export-format" onchange="generateExportText()">
+                <option value="pandora" selected>PandoraHolograms (Recommended)</option>
+                <option value="decent">DecentHolograms</option>
+            </select>
+        </div>
+
+        <textarea id="export-output" class="export-area" readonly></textarea>
+        
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button class="mc-btn" onclick="closeModal('export-modal')">Close</button>
+            <button class="mc-btn mc-btn-green" onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+    </div>
+</div>
+
+<!-- Documentation Modal -->
+<div id="docs-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="docs-header">
+            <div class="panel-title" style="font-size: 18px; color: var(--accent-color);">Pandora Holograms Documentation</div>
+            <button class="mc-btn mc-btn-red" onclick="closeModal('docs-modal')">X</button>
+        </div>
+        
+        <div class="docs-body">
+            <div class="docs-section">
+                <div class="docs-h1">Overview</div>
+                <p>PandoraHolograms is a high-performance, packet-based hologram plugin designed for modern Factions and Survival servers. It features an intuitive single-command creation system and seamless editor integration.</p>
+            </div>
+
+            <div class="docs-section">
+                <div class="docs-h1">Commands</div>
+                
+                <div class="docs-h2">Creating a Hologram</div>
+                <div class="cmd-block">/holo create <span class="cmd-arg">&lt;name&gt;</span> <span class="cmd-arg">[lines...]</span></div>
+                <p>Creates a new hologram at your location. You can specify multiple lines at once by wrapping them in quotes.</p>
+                <p><i>Example:</i> <code>/holo create spawn "&eWelcome" "&7To the server"</code></p>
+
+                <div class="docs-h2">Managing Lines</div>
+                <div class="cmd-block">/holo addline <span class="cmd-arg">&lt;name&gt;</span> <span class="cmd-arg">&lt;text&gt;</span></div>
+                <p>Adds a new line to the bottom of the hologram.</p>
+
+                <div class="cmd-block">/holo setline <span class="cmd-arg">&lt;name&gt;</span> <span class="cmd-arg">&lt;index&gt;</span> <span class="cmd-arg">&lt;text&gt;</span></div>
+                <p>Updates a specific line number (starting at 1).</p>
+
+                <div class="cmd-block">/holo removeline <span class="cmd-arg">&lt;name&gt;</span> <span class="cmd-arg">&lt;index&gt;</span></div>
+                <p>Removes a specific line number.</p>
+
+                <div class="docs-h2">Utility</div>
+                <div class="cmd-block">/holo movehere <span class="cmd-arg">&lt;name&gt;</span></div>
+                <p>Teleports the specified hologram to your current location.</p>
+
+                <div class="cmd-block">/holo delete <span class="cmd-arg">&lt;name&gt;</span></div>
+                <p>Permanently deletes a hologram.</p>
+            </div>
+
+            <div class="docs-section">
+                <div class="docs-h1">Developer API</div>
+                <p>PandoraHolograms offers a robust API for developers.</p>
+                <div class="cmd-block">
+                    Hologram holo = PandoraAPI.createHologram("test", loc);<br>
+                    holo.addLine("&aCreated via API");
+                </div>
+            </div>
+            
+            <div class="docs-section">
+                <div class="docs-h1">Support</div>
+                <p>Need help? Join our support discord or click the "Support us" link in the editor.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initial Data
+    let hologramLines = [
+        "&e&lPandora Holograms",
+        "&7A fresh take on holograms",
+        "",
+        "&7Editor Features:",
+        "&f• &7Live Preview",
+        "&f• &7Drag & Drop Lines",
+        "&f• &7One-Click Export",
+        "",
+        "&bDefault Commands:",
+        "&f/holo create <name> ...",
+        "&f/holo movehere <name>",
+        "",
+        "&e&nGet started on the right! &r&e→"
+    ];
+
+    /**
+     * Minecraft Color Parser
+     */
+    function parseMcChat(text) {
+        if (!text) return "&nbsp;";
+        
+        const styleMap = {
+            '0': 'mc-0', '1': 'mc-1', '2': 'mc-2', '3': 'mc-3',
+            '4': 'mc-4', '5': 'mc-5', '6': 'mc-6', '7': 'mc-7',
+            '8': 'mc-8', '9': 'mc-9', 'a': 'mc-a', 'b': 'mc-b',
+            'c': 'mc-c', 'd': 'mc-d', 'e': 'mc-e', 'f': 'mc-f',
+            'l': 'mc-l', 'o': 'mc-o', 'n': 'mc-n', 'm': 'mc-m', 'k': 'mc-k'
+        };
+
+        let result = '';
+        let currentClasses = new Set(['mc-f']); 
+        let buffer = '';
+
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === '&' && i + 1 < text.length) {
+                const code = text[i + 1].toLowerCase();
+                if (styleMap[code] || code === 'r') {
+                    if (buffer.length > 0) {
+                        result += `<span class="${Array.from(currentClasses).join(' ')}">${buffer}</span>`;
+                        buffer = '';
+                    }
+                    if (code === 'r') {
+                        currentClasses.clear();
+                        currentClasses.add('mc-f');
+                    } else if ('0123456789abcdef'.includes(code)) {
+                        currentClasses.clear();
+                        currentClasses.add(styleMap[code]);
+                    } else {
+                        currentClasses.add(styleMap[code]);
+                    }
+                    i++; 
+                    continue;
+                }
+            }
+            buffer += text[i];
+        }
+        if (buffer.length > 0) {
+            result += `<span class="${Array.from(currentClasses).join(' ')}">${buffer}</span>`;
+        }
+        return result === '' ? '&nbsp;' : result;
+    }
+
+    /**
+     * UI Logic
+     */
+    function renderLines() {
+        const list = document.getElementById('line-list');
+        list.innerHTML = '';
+
+        hologramLines.forEach((line, index) => {
+            const item = document.createElement('div');
+            item.className = 'line-item';
+            
+            item.innerHTML = `
+                <div class="line-handle"><i class="fas fa-grip-lines"></i></div>
+                <input type="text" class="line-input" value="${line.replace(/"/g, '&quot;')}" 
+                       oninput="updateLine(${index}, this.value)" placeholder="Empty Line">
+                <button class="mc-btn mc-btn-red" style="padding: 6px 10px;" onclick="removeLine(${index})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            list.appendChild(item);
+        });
+
+        // Also update preview
+        renderPreview();
+    }
+
+    function renderPreview() {
+        const container = document.getElementById('active-hologram');
+        container.innerHTML = '';
+        hologramLines.forEach(lineText => {
+            const lineDiv = document.createElement('div');
+            lineDiv.className = 'mc-line';
+            lineDiv.innerHTML = parseMcChat(lineText);
+            container.appendChild(lineDiv);
+        });
+    }
+
+    function updateLine(index, value) {
+        hologramLines[index] = value;
+        renderPreview();
+    }
+
+    function addNewLine() {
+        hologramLines.push("&7New Line");
+        renderLines();
+        const list = document.getElementById('editor-content');
+        list.scrollTop = list.scrollHeight;
+    }
+
+    function removeLine(index) {
+        hologramLines.splice(index, 1);
+        renderLines();
+    }
+
+    function updatePreview() {
+        // Placeholder hook
+    }
+
+    /**
+     * Clipboard & Export Logic
+     */
+    function copyCode(code) {
+        // Updated copy method to fix permissions error in iframes
+        const el = document.createElement('textarea');
+        el.value = code;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        const fb = document.getElementById('copy-feedback');
+        fb.innerText = `Copied ${code}`;
+        setTimeout(() => fb.innerText = '', 1500);
+    }
+
+    function showExport() {
+        const modal = document.getElementById('export-modal');
+        modal.style.display = 'flex';
+        generateExportText();
+    }
+
+    function openDocs() {
+        document.getElementById('docs-modal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function generateExportText() {
+        const name = document.getElementById('holo-name').value || 'my_hologram';
+        const format = document.getElementById('export-format').value;
+        const output = document.getElementById('export-output');
+        let commands = "";
+
+        if (format === 'pandora') {
+            // New logic: One big command + movehere
+            const lineArgs = hologramLines.map(line => `"${line || ' '}"`).join(' ');
+            commands += `/holo create ${name} ${lineArgs}\n`;
+            commands += `/holo movehere ${name}`;
+        } else {
+            // DecentHolograms Logic (Legacy)
+            if (hologramLines.length > 0) {
+                const firstLine = hologramLines[0];
+                commands += `/dh create ${name} "${firstLine}"\n`;
+                for (let i = 1; i < hologramLines.length; i++) {
+                    let text = hologramLines[i];
+                    if (text === "") text = " "; 
+                    commands += `/dh addline ${name} "${text}"\n`;
+                }
+            } else {
+                commands += `/dh create ${name}\n`;
+            }
+            commands += `\n/dh movehere ${name}`;
+        }
+
+        output.value = commands;
+    }
+
+    function copyToClipboard() {
+        const copyText = document.getElementById("export-output");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); 
+        document.execCommand("copy");
+        
+        const btn = document.querySelector('#export-modal .mc-btn-green');
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = originalText, 2000);
+    }
+
+    // Init
+    window.onload = function() {
+        renderLines();
+    };
+
+</script>
+
+</body>
+</html>

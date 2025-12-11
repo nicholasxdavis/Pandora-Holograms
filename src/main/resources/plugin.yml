@@ -1,0 +1,45 @@
+name: PandoraHolograms
+version: ${version}
+main: com.pandora.holograms.PandoraHologramsPlugin
+api-version: 1.13
+description: A high-performance, packet-based hologram plugin
+author: Blacnova Development
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  holo:
+    description: Main hologram command
+    aliases: [hologram, h]
+    usage: /holo <create|addline|setline|removeline|insertline|movehere|teleport|clone|info|update|delete|list|live|version|reload>
+    permission: pandoraholograms.use
+    permission-message: "&e&lHolograms &8» &cYou don't have permission to use this command!"
+
+permissions:
+  pandoraholograms.*:
+    description: All permissions for PandoraHolograms
+    default: op
+    children:
+      pandoraholograms.use: true
+      pandoraholograms.create: true
+      pandoraholograms.edit: true
+      pandoraholograms.delete: true
+      pandoraholograms.admin: true
+  pandoraholograms.use:
+    description: Use hologram commands
+    default: op
+  pandoraholograms.create:
+    description: Create holograms
+    default: op
+  pandoraholograms.edit:
+    description: Edit hologram lines
+    default: op
+  pandoraholograms.delete:
+    description: Delete holograms
+    default: op
+  pandoraholograms.admin:
+    description: Admin commands (reload, etc.)
+    default: op
+
+
+

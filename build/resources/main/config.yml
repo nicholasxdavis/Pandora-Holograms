@@ -1,0 +1,19 @@
+# PandoraHolograms Configuration
+
+# Default line height between hologram lines
+default-line-height: 0.3
+
+# Default display range in blocks
+default-display-range: 48
+
+# Update interval in ticks (20 ticks = 1 second)
+update-interval: 20
+
+# Check for updates on startup
+update-checker: true
+
+# Save holograms to database (currently uses YAML, can be extended to MySQL)
+storage-type: yaml
+
+
+
