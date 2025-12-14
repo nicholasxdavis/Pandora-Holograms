@@ -1,4 +1,4 @@
-![PandoraHolograms Logo](https://nicholasxdavis.github.io/BN-db1/img/panholo.png)
+![PandoraHolograms Logo](https://nicholasxdavis.github.io/BN-db1/img/panholo1.png)
 
 <div align="center">
 
@@ -447,6 +447,7 @@ See the [LICENSE](LICENSE) file for full terms and conditions.
 **Made with love by Blacnova Development**
 
 </div>
+
 
 
 
